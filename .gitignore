@@ -1,0 +1,24 @@
+# Python virtual environment
+venv/
+.env
+__pycache__/
+
+# PyInstaller build artifacts
+build/
+dist/
+*.spec
+*.app
+*.dmg
+dmg_folder/
+*.icns
+*.iconset/
+
+# macOS system files
+.DS_Store
+
+# IDEs
+.vscode/
+.idea/
+
+# Custom binaries
+fileicon
