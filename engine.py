@@ -3,8 +3,6 @@ import queue
 import time
 import os
 
-# Crucial fix for PyInstaller: Force Playwright to use user directory instead of temp bundle directory
-os.environ["PLAYWRIGHT_BROWSERS_PATH"] = os.path.expanduser("~/Library/Caches/ms-playwright")
 
 from playwright.sync_api import sync_playwright
 from playwright_stealth import Stealth

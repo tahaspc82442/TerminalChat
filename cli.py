@@ -4,8 +4,6 @@ import time
 import sys
 import os
 
-# Crucial fix for PyInstaller: Force Playwright to use user directory instead of temp bundle directory
-os.environ["PLAYWRIGHT_BROWSERS_PATH"] = os.path.expanduser("~/Library/Caches/ms-playwright")
 
 from engine import InstagramEngine
 
