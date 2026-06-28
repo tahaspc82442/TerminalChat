@@ -13,7 +13,7 @@ else
     git clone https://github.com/tahaspc82442/TerminalChat.git "$INSTALL_DIR"
 fi
 
-cd "$INSTALL_DIR/mac_app"
+cd "$INSTALL_DIR"
 
 # Ensure Python is installed
 if ! command -v python3 &> /dev/null; then
@@ -42,7 +42,7 @@ WRAPPER_SCRIPT="$BIN_DIR/terminalchat"
 cat << EOF > "$WRAPPER_SCRIPT"
 #!/bin/bash
 # Wrapper to launch TerminalChat from anywhere
-cd "$INSTALL_DIR/mac_app"
+cd "$INSTALL_DIR"
 source venv/bin/activate
 exec python3 cli.py "\$@"
 EOF
