@@ -14,7 +14,7 @@
 <br/>
 
 <div align="center">
-  <img src="images/image.png" alt="TerminalChat Screenshot" width="800" />
+  <img src="images/demo.gif" alt="TerminalChat Screenshot" width="800" />
 </div>
 
 ## 🧠 Why TerminalChat?
