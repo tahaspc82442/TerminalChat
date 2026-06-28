@@ -31,7 +31,8 @@ class InstagramEngine:
                 self.output_queue.put({"type": "status", "message": "Launching browser..."})
                 self.browser_context = p.chromium.launch_persistent_context(
                     user_data_dir=self.user_data_dir,
-                    headless=True,
+                    headless=False,
+                    args=["--headless=new"],
                     viewport={"width": 1280, "height": 800}
                 )
                 self.page = self.browser_context.new_page()
@@ -246,13 +247,19 @@ def authenticate():
         page.goto("https://www.instagram.com/direct/inbox/")
         
         print("[*] Please log in to Instagram in the popup window.")
-        print("[*] Waiting for successful login...")
+        print("[*] Solve any captchas or 2FA challenges if they appear.")
+        print("[*] Once you see your Inbox, this window will automatically close.")
+        print("[*] (If it doesn't close, simply close the browser window yourself once logged in).")
         
-        while "login" in page.url or "accounts" in page.url:
+        while True:
             try:
                 page.wait_for_timeout(1000)
+                if "direct/inbox" in page.url:
+                    break
+                if page.locator('svg[aria-label="Direct"]').count() > 0:
+                    break
             except:
-                # Browser was closed
+                # Browser was closed manually by the user
                 break
                 
         print("[+] Authentication detected! Saving session and closing browser...")
