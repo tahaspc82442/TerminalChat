@@ -55,6 +55,15 @@ xattr -cr /Applications/TerminalChat.app
 ```
 Then launch the app normally!
 
+### 🏗️ Build from Source (Bypass Gatekeeper Entirely)
+If you prefer not to bypass Gatekeeper, you can easily build the app yourself! macOS completely trusts locally compiled applications.
+```bash
+git clone https://github.com/tahaspc82442/TerminalChat.git
+cd TerminalChat/mac_app
+bash build.sh
+```
+The script will automatically set up the python environment, download the dependencies, compile the binary, inject the logo, and create a brand new `.dmg` right on your Desktop!
+
 ## 💻 Usage
 
 Once booted, the terminal is entirely command-driven. 

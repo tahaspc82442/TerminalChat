@@ -17,8 +17,23 @@ if [ ! -f "$IMG" ]; then
 fi
 
 echo "[*] Building PyInstaller executable..."
-# We use PyInstaller to package the python code so it runs without python installed on the target machine
-source venv/bin/activate
+# Ensure Python is installed
+if ! command -v python3 &> /dev/null; then
+    echo "[!] ERROR: python3 is not installed."
+    exit 1
+fi
+
+# Create virtual environment if it doesn't exist
+if [ ! -d "venv" ]; then
+    echo "[*] Creating virtual environment..."
+    python3 -m venv venv
+    source venv/bin/activate
+    echo "[*] Installing dependencies..."
+    pip install -r requirements.txt
+    playwright install chromium
+else
+    source venv/bin/activate
+fi
 pip install pyinstaller
 pyinstaller --onefile --name cli_engine --collect-all playwright_stealth cli.py
 
