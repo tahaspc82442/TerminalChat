@@ -4,10 +4,8 @@ set -e
 echo "[*] Cleaning up old builds..."
 rm -rf build dist TerminalChat.app TerminalChat.dmg TerminalChat.iconset TerminalChat.icns
 
-echo "[*] Downloading icon injector..."
-curl -sL https://raw.githubusercontent.com/mklement0/fileicon/master/bin/fileicon > fileicon
-chmod +x fileicon
-
+echo "[*] Creating iconset..."
+mkdir TerminalChat.iconset
 # Place your custom logo here as logo.png
 IMG="logo.png"
 
@@ -15,6 +13,20 @@ if [ ! -f "$IMG" ]; then
     echo "[!] ERROR: $IMG not found! Please place your logo in the mac_app folder."
     exit 1
 fi
+
+sips -s format png -s dpiWidth 72 -s dpiHeight 72 -z 16 16   $IMG --out TerminalChat.iconset/icon_16x16.png
+sips -s format png -s dpiWidth 144 -s dpiHeight 144 -z 32 32   $IMG --out TerminalChat.iconset/icon_16x16@2x.png
+sips -s format png -s dpiWidth 72 -s dpiHeight 72 -z 32 32   $IMG --out TerminalChat.iconset/icon_32x32.png
+sips -s format png -s dpiWidth 144 -s dpiHeight 144 -z 64 64   $IMG --out TerminalChat.iconset/icon_32x32@2x.png
+sips -s format png -s dpiWidth 72 -s dpiHeight 72 -z 128 128 $IMG --out TerminalChat.iconset/icon_128x128.png
+sips -s format png -s dpiWidth 144 -s dpiHeight 144 -z 256 256 $IMG --out TerminalChat.iconset/icon_128x128@2x.png
+sips -s format png -s dpiWidth 72 -s dpiHeight 72 -z 256 256 $IMG --out TerminalChat.iconset/icon_256x256.png
+sips -s format png -s dpiWidth 144 -s dpiHeight 144 -z 512 512 $IMG --out TerminalChat.iconset/icon_256x256@2x.png
+sips -s format png -s dpiWidth 72 -s dpiHeight 72 -z 512 512 $IMG --out TerminalChat.iconset/icon_512x512.png
+sips -s format png -s dpiWidth 144 -s dpiHeight 144 -z 1024 1024 $IMG --out TerminalChat.iconset/icon_512x512@2x.png
+
+iconutil -c icns TerminalChat.iconset
+rm -rf TerminalChat.iconset
 
 echo "[*] Building PyInstaller executable..."
 # We use PyInstaller to package the python code so it runs without python installed on the target machine
@@ -40,17 +52,18 @@ echo "[*] Injecting payload into App Bundle..."
 # Move the compiled python binary into the App's Resources folder so the AppleScript can find it
 mv dist/cli_engine TerminalChat.app/Contents/Resources/
 
-# Use the downloaded swift-based utility to forcefully set the native macOS app icon
-echo "[*] Applying custom icon to app bundle..."
-./fileicon set TerminalChat.app "$IMG"
+# Apply the generated icns file
+cp TerminalChat.icns TerminalChat.app/Contents/Resources/applet.icns
 
 # Touch the app so macOS refreshes the icon cache
 touch TerminalChat.app
 
-echo "[*] Code signing App Bundle..."
-# We must re-sign the app bundle because adding the custom executable and icon broke the original signature!
-# Without this, macOS Gatekeeper will say the app is "damaged and should be moved to trash"
-codesign --force --deep --sign - TerminalChat.app
+echo "[*] Stripping Code Signature..."
+# osacompile automatically ad-hoc signs the app bundle. 
+# macOS Gatekeeper will flag any downloaded ad-hoc signed app as "Damaged". 
+# By completely stripping the signature, we downgrade the error to "Unidentified Developer", 
+# which users can easily bypass by Right-Clicking and selecting "Open".
+codesign --remove-signature TerminalChat.app
 
 echo "[*] Creating DMG..."
 TIMESTAMP=$(date +"%Y%m%d_%H%M%S")
