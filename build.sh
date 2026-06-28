@@ -47,6 +47,11 @@ echo "[*] Applying custom icon to app bundle..."
 # Touch the app so macOS refreshes the icon cache
 touch TerminalChat.app
 
+echo "[*] Code signing App Bundle..."
+# We must re-sign the app bundle because adding the custom executable and icon broke the original signature!
+# Without this, macOS Gatekeeper will say the app is "damaged and should be moved to trash"
+codesign --force --deep --sign - TerminalChat.app
+
 echo "[*] Creating DMG..."
 TIMESTAMP=$(date +"%Y%m%d_%H%M%S")
 

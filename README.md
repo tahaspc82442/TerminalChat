@@ -41,6 +41,14 @@ Read your messages. Reply to your friends. Get out. Stay focused.
 
 *(Note: On your first launch, macOS may warn you about an unrecognized developer. Go to System Settings -> Privacy & Security to allow it to run).*
 
+### ⚠️ Troubleshooting "App is damaged" error
+Because this app is independently developed and not signed with a paid Apple Developer certificate, macOS Gatekeeper may sometimes aggressively quarantine it and say the app is "damaged and can't be opened". 
+To fix this, open your Mac's Terminal and run this exact command to strip the quarantine attribute:
+```bash
+xattr -cr /Applications/TerminalChat.app
+```
+Then simply double-click the app again to launch!
+
 ## 💻 Usage
 
 Once booted, the terminal is entirely command-driven. 
