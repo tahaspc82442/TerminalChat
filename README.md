@@ -35,29 +35,27 @@ Read your messages. Reply to your friends. Get out. Stay focused.
 
 ## 🛠 Installation
 
-1. Go to the [Releases page](../../releases) and download the latest `TerminalChat.dmg`.
-2. Open the `.dmg` file and drag **TerminalChat** into your Applications folder.
-3. Launch the app! The terminal will automatically boot up, establish a secure connection, and guide you through a one-time login.
+Because this is a pure hacker tool, you can install it instantly via the command line (just like `npm` or `brew`) without dealing with macOS DMG warnings or Gatekeeper!
 
-*(Note: On your first launch, macOS may warn you about an unrecognized developer. Go to System Settings -> Privacy & Security to allow it to run).*
+Open your Terminal and run:
 
-### ⚠️ Troubleshooting "App is damaged" error
-Because this app is independently developed and not signed with a paid Apple Developer certificate, macOS Gatekeeper may sometimes aggressively quarantine it and say the app is "damaged and can't be opened". 
-
-This is completely normal for open-source Mac apps. To fix this, open your Mac's Terminal and run this exact command to strip the quarantine attribute:
 ```bash
-xattr -cr /Applications/TerminalChat.app
+curl -sL https://raw.githubusercontent.com/tahaspc82442/TerminalChat/main/install.sh | bash
 ```
-Then simply double-click the app again to launch!
 
-### 🏗️ Build from Source (Bypass Gatekeeper Entirely)
-If you prefer not to bypass Gatekeeper, you can easily build the app yourself! macOS completely trusts locally compiled applications.
+The script will automatically:
+1. Clone the repository into a hidden folder (`~/.terminalchat`)
+2. Create an isolated environment
+3. Install the stealth browser engine
+4. Create a global `terminalchat` command on your Mac
+
+Once finished, simply type:
 ```bash
-git clone https://github.com/tahaspc82442/TerminalChat.git
-cd TerminalChat/mac_app
-bash build.sh
+terminalchat
 ```
-The script will automatically set up the python environment, download the dependencies, compile the binary, inject the logo, and create a brand new `.dmg` right on your Desktop!
+...and you're in. 
+
+*(If you get a "command not found" error, the installer will print a single `export PATH` line for you to copy into your `~/.zshrc`).*
 
 ## 💻 Usage
 
